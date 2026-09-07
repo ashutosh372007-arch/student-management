@@ -11,6 +11,7 @@ const teacherSchema = new Schema<ITeacher>(
     email: { type: String, required: true, trim: true },
     gender: { type: String, enum: ['Male', 'Female', 'Other'], required: true },
     address: { type: String, required: true, trim: true },
+    salary: { type: Number, default: 50000 },
     joiningDate: { type: Date, default: Date.now },
   },
   { timestamps: true }

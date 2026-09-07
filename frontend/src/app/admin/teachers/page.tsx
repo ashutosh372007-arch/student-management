@@ -103,6 +103,7 @@ export default function TeachersPage() {
                 <th>Employee ID</th>
                 <th>Subject</th>
                 <th>Qualification</th>
+                <th>Monthly Salary</th>
                 <th>Contact</th>
                 <th>Actions</th>
               </tr>
@@ -114,6 +115,9 @@ export default function TeachersPage() {
                   <td>{teacher.employeeId}</td>
                   <td><span className="badge badge-info">{teacher.subject}</span></td>
                   <td>{teacher.qualification}</td>
+                  <td style={{ fontWeight: 700, color: 'var(--success-light)' }}>
+                    ₹{(teacher.salary || 50000).toLocaleString()}
+                  </td>
                   <td>{teacher.contact}</td>
                   <td>
                     <div style={{ display: 'flex', gap: '6px' }}>

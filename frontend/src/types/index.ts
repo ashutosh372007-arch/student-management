@@ -53,6 +53,7 @@ export interface Teacher {
   email: string;
   gender: 'Male' | 'Female' | 'Other';
   address: string;
+  salary?: number;
   joiningDate: string;
   createdAt: string;
   updatedAt: string;

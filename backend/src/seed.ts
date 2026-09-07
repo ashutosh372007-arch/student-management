@@ -13,26 +13,26 @@ import Submission from './models/Submission';
 import Notification from './models/Notification';
 
 const SEED_TEACHERS = [
-  { name: 'Dr. Rajesh Kumar', subject: 'Mathematics', qualification: 'Ph.D in Mathematics', contact: '9876543210', email: 'rajesh.kumar@school.com', gender: 'Male', address: '123, Sector 15, Noida' },
-  { name: 'Sunita Deshmukh', subject: 'Physics', qualification: 'M.Sc in Physics, B.Ed', contact: '9876543211', email: 'sunita.deshmukh@school.com', gender: 'Female', address: '45, Preet Vihar, Delhi' },
-  { name: 'Anil Wadhwa', subject: 'Chemistry', qualification: 'M.Sc in Chemistry', contact: '9876543212', email: 'anil.wadhwa@school.com', gender: 'Male', address: '89, Malviya Nagar, Jaipur' },
-  { name: 'Priya Sebastian', subject: 'English', qualification: 'M.A. in English Literature', contact: '9876543213', email: 'priya.sebastian@school.com', gender: 'Female', address: '12, Indiranagar, Bangalore' },
-  { name: 'Dr. Amit Bhardwaj', subject: 'Biology', qualification: 'Ph.D in Botany', contact: '9876543214', email: 'amit.bhardwaj@school.com', gender: 'Male', address: '56, Salt Lake, Kolkata' },
-  { name: 'Meenakshi Sundaram', subject: 'History', qualification: 'M.A. in History, B.Ed', contact: '9876543215', email: 'meenakshi.sundaram@school.com', gender: 'Female', address: '78, Anna Nagar, Chennai' },
-  { name: 'Vikram Rathore', subject: 'Geography', qualification: 'M.A. in Geography', contact: '9876543216', email: 'vikram.rathore@school.com', gender: 'Male', address: '34, Vaishali Nagar, Jaipur' },
-  { name: 'Shalini Hegde', subject: 'Computer Science', qualification: 'M.Tech in CSE', contact: '9876543217', email: 'shalini.hegde@school.com', gender: 'Female', address: '90, Koramangala, Bangalore' },
-  { name: 'Suresh Raina', subject: 'Physical Education', qualification: 'M.P.Ed', contact: '9876543218', email: 'suresh.raina@school.com', gender: 'Male', address: '15, Model Town, Ghaziabad' },
-  { name: 'Neha Kakkar', subject: 'Music', qualification: 'M.Mus', contact: '9876543219', email: 'neha.kakkar@school.com', gender: 'Female', address: '22, Bandra West, Mumbai' },
-  { name: 'Ravi Shastri', subject: 'Civics', qualification: 'M.A. in Political Science', contact: '9876543220', email: 'ravi.shastri@school.com', gender: 'Male', address: '67, Civil Lines, Prayagraj' },
-  { name: 'Divya Dutta', subject: 'Art', qualification: 'B.FA, M.FA', contact: '9876543221', email: 'divya.dutta@school.com', gender: 'Female', address: '43, Lokhandwala, Mumbai' },
-  { name: 'Dr. Sanjay Gupta', subject: 'Economics', qualification: 'Ph.D in Economics', contact: '9876543222', email: 'sanjay.gupta@school.com', gender: 'Male', address: '102, Saket, Delhi' },
-  { name: 'Vandana Shiva', subject: 'Environmental Science', qualification: 'Ph.D in Environmental Studies', contact: '9876543223', email: 'vandana.shiva@school.com', gender: 'Female', address: '7, Dehradun Valley, Dehradun' },
-  { name: 'Abhinav Bindra', subject: 'Sports Science', qualification: 'B.Sc in Sports Management', contact: '9876543224', email: 'abhinav.bindra@school.com', gender: 'Male', address: '28, Sector 4, Chandigarh' },
-  { name: 'Kiran Bedi', subject: 'Social Studies', qualification: 'M.A. in Public Administration', contact: '9876543225', email: 'kiran.bedi@school.com', gender: 'Female', address: '55, Dwarka, Delhi' },
-  { name: 'Harish Salve', subject: 'Political Science', qualification: 'LL.M', contact: '9876543226', email: 'harish.salve@school.com', gender: 'Male', address: '88, Vasant Kunj, Delhi' },
-  { name: 'Sudha Murty', subject: 'Moral Science', qualification: 'M.Tech in Electrical Eng, Author', contact: '9876543227', email: 'sudha.murty@school.com', gender: 'Female', address: '11, Jayanagar, Bangalore' },
-  { name: 'Raghuram Rajan', subject: 'Business Studies', qualification: 'Ph.D in Management', contact: '9876543228', email: 'raghuram.rajan@school.com', gender: 'Male', address: '99, Nungambakkam, Chennai' },
-  { name: 'Arundhati Roy', subject: 'Creative Writing', qualification: 'B.Arch, Author', contact: '9876543229', email: 'arundhati.roy@school.com', gender: 'Female', address: '6, Chanakyapuri, Delhi' }
+  { name: 'Dr. Rajesh Kumar', subject: 'Mathematics', qualification: 'Ph.D in Mathematics', contact: '9876543210', email: 'rajesh.kumar@school.com', gender: 'Male', address: '123, Sector 15, Noida', salary: 75000 },
+  { name: 'Sunita Deshmukh', subject: 'Physics', qualification: 'M.Sc in Physics, B.Ed', contact: '9876543211', email: 'sunita.deshmukh@school.com', gender: 'Female', address: '45, Preet Vihar, Delhi', salary: 65000 },
+  { name: 'Anil Wadhwa', subject: 'Chemistry', qualification: 'M.Sc in Chemistry', contact: '9876543212', email: 'anil.wadhwa@school.com', gender: 'Male', address: '89, Malviya Nagar, Jaipur', salary: 60000 },
+  { name: 'Priya Sebastian', subject: 'English', qualification: 'M.A. in English Literature', contact: '9876543213', email: 'priya.sebastian@school.com', gender: 'Female', address: '12, Indiranagar, Bangalore', salary: 55000 },
+  { name: 'Dr. Amit Bhardwaj', subject: 'Biology', qualification: 'Ph.D in Botany', contact: '9876543214', email: 'amit.bhardwaj@school.com', gender: 'Male', address: '56, Salt Lake, Kolkata', salary: 72000 },
+  { name: 'Meenakshi Sundaram', subject: 'History', qualification: 'M.A. in History, B.Ed', contact: '9876543215', email: 'meenakshi.sundaram@school.com', gender: 'Female', address: '78, Anna Nagar, Chennai', salary: 52000 },
+  { name: 'Vikram Rathore', subject: 'Geography', qualification: 'M.A. in Geography', contact: '9876543216', email: 'vikram.rathore@school.com', gender: 'Male', address: '34, Vaishali Nagar, Jaipur', salary: 50000 },
+  { name: 'Shalini Hegde', subject: 'Computer Science', qualification: 'M.Tech in CSE', contact: '9876543217', email: 'shalini.hegde@school.com', gender: 'Female', address: '90, Koramangala, Bangalore', salary: 68000 },
+  { name: 'Suresh Raina', subject: 'Physical Education', qualification: 'M.P.Ed', contact: '9876543218', email: 'suresh.raina@school.com', gender: 'Male', address: '15, Model Town, Ghaziabad', salary: 48000 },
+  { name: 'Neha Kakkar', subject: 'Music', qualification: 'M.Mus', contact: '9876543219', email: 'neha.kakkar@school.com', gender: 'Female', address: '22, Bandra West, Mumbai', salary: 45000 },
+  { name: 'Ravi Shastri', subject: 'Civics', qualification: 'M.A. in Political Science', contact: '9876543220', email: 'ravi.shastri@school.com', gender: 'Male', address: '67, Civil Lines, Prayagraj', salary: 53000 },
+  { name: 'Divya Dutta', subject: 'Art', qualification: 'B.FA, M.FA', contact: '9876543221', email: 'divya.dutta@school.com', gender: 'Female', address: '43, Lokhandwala, Mumbai', salary: 46000 },
+  { name: 'Dr. Sanjay Gupta', subject: 'Economics', qualification: 'Ph.D in Economics', contact: '9876543222', email: 'sanjay.gupta@school.com', gender: 'Male', address: '102, Saket, Delhi', salary: 70000 },
+  { name: 'Vandana Shiva', subject: 'Environmental Science', qualification: 'Ph.D in Environmental Studies', contact: '9876543223', email: 'vandana.shiva@school.com', gender: 'Female', address: '7, Dehradun Valley, Dehradun', salary: 62000 },
+  { name: 'Abhinav Bindra', subject: 'Sports Science', qualification: 'B.Sc in Sports Management', contact: '9876543224', email: 'abhinav.bindra@school.com', gender: 'Male', address: '28, Sector 4, Chandigarh', salary: 50000 },
+  { name: 'Kiran Bedi', subject: 'Social Studies', qualification: 'M.A. in Public Administration', contact: '9876543225', email: 'kiran.bedi@school.com', gender: 'Female', address: '55, Dwarka, Delhi', salary: 58000 },
+  { name: 'Harish Salve', subject: 'Political Science', qualification: 'LL.M', contact: '9876543226', email: 'harish.salve@school.com', gender: 'Male', address: '88, Vasant Kunj, Delhi', salary: 64000 },
+  { name: 'Sudha Murty', subject: 'Moral Science', qualification: 'M.Tech in Electrical Eng, Author', contact: '9876543227', email: 'sudha.murty@school.com', gender: 'Female', address: '11, Jayanagar, Bangalore', salary: 60000 },
+  { name: 'Raghuram Rajan', subject: 'Business Studies', qualification: 'Ph.D in Management', contact: '9876543228', email: 'raghuram.rajan@school.com', gender: 'Male', address: '99, Nungambakkam, Chennai', salary: 74000 },
+  { name: 'Arundhati Roy', subject: 'Creative Writing', qualification: 'B.Arch, Author', contact: '9876543229', email: 'arundhati.roy@school.com', gender: 'Female', address: '6, Chanakyapuri, Delhi', salary: 55000 }
 ];
 
 const SEED_STUDENTS = [

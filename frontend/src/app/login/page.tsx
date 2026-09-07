@@ -122,7 +122,65 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: '24px' }}>
+        {!isRegister && (
+          <div style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid var(--border)' }}>
+            <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '12px', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              ⚡ Quick Demo 1-Click Sign In
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                style={{ fontSize: '11px', padding: '8px 4px', justifyContent: 'center' }}
+                onClick={async () => {
+                  setUsername('admin');
+                  setPassword('admin123');
+                  setLoading(true);
+                  try {
+                    await login('admin', 'admin123');
+                    router.push('/admin/dashboard');
+                  } catch (e: any) { setError(e.message); } finally { setLoading(false); }
+                }}
+              >
+                👑 Admin
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                style={{ fontSize: '11px', padding: '8px 4px', justifyContent: 'center' }}
+                onClick={async () => {
+                  setUsername('T2026001');
+                  setPassword('teacher123');
+                  setLoading(true);
+                  try {
+                    await login('T2026001', 'teacher123');
+                    router.push('/admin/dashboard');
+                  } catch (e: any) { setError(e.message); } finally { setLoading(false); }
+                }}
+              >
+                👩‍🏫 Teacher
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                style={{ fontSize: '11px', padding: '8px 4px', justifyContent: 'center' }}
+                onClick={async () => {
+                  setUsername('S2026001');
+                  setPassword('student123');
+                  setLoading(true);
+                  try {
+                    await login('S2026001', 'student123');
+                    router.push('/admin/dashboard');
+                  } catch (e: any) { setError(e.message); } finally { setLoading(false); }
+                }}
+              >
+                🎓 Student
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
           <button
             onClick={() => { setIsRegister(!isRegister); setError(''); }}
             style={{

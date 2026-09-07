@@ -53,6 +53,7 @@ export interface ITeacher extends Document {
   email: string;
   gender: 'Male' | 'Female' | 'Other';
   address: string;
+  salary?: number;
   joiningDate: Date;
   createdAt: Date;
   updatedAt: Date;
