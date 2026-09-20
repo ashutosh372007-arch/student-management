@@ -382,7 +382,7 @@ async function seedDatabase() {
     ];
 
     for (const config of assignmentsConfig) {
-      const teacher = teachers.find(t => t.subject === config.subject)?.name || 'Subject Teacher';
+      const teacher = teachers.find((t: any) => t.subject === config.subject)?.name || 'Subject Teacher';
       
       const assignment = new Assignment({
         ...config,
@@ -390,7 +390,7 @@ async function seedDatabase() {
       });
       await assignment.save();
 
-      const classStudents = students.filter(s => s.class === config.class && s.section === config.section);
+      const classStudents = students.filter((s: any) => s.class === config.class && s.section === config.section);
       for (const s of classStudents) {
         const isPastDue = config.dueDate < today;
         let status: 'Pending' | 'Submitted' | 'Late' | 'Evaluated' = 'Pending';

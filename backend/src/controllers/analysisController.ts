@@ -25,11 +25,11 @@ export const getStudentPerformanceAnalysis = async (req: Request, res: Response)
     const submissions = await Submission.find({ student: studentId });
 
     const totalAttendanceCount = attendance.length;
-    const presentAttendanceCount = attendance.filter(a => a.status === 'Present' || a.status === 'Late').length;
+    const presentAttendanceCount = attendance.filter((a: any) => a.status === 'Present' || a.status === 'Late').length;
     const overallAttendanceRate = totalAttendanceCount > 0 ? (presentAttendanceCount / totalAttendanceCount) * 100 : 0;
 
     const subjectAttendance: Record<string, { total: number; present: number }> = {};
-    attendance.forEach(a => {
+    attendance.forEach((a: any) => {
       const sub = a.subject || 'General';
       if (!subjectAttendance[sub]) {
         subjectAttendance[sub] = { total: 0, present: 0 };
@@ -50,14 +50,14 @@ export const getStudentPerformanceAnalysis = async (req: Request, res: Response)
     const subjectMarksMap: Record<string, { totalObtained: number; totalMax: number }> = {};
     const semesterHistory: Array<{ semester: string; percentage: number; gpa: number }> = [];
 
-    results.forEach(resRecord => {
+    results.forEach((resRecord: any) => {
       semesterHistory.push({
         semester: resRecord.semester,
         percentage: resRecord.percentage,
         gpa: resRecord.gpa,
       });
 
-      resRecord.subjectMarks.forEach(sm => {
+      resRecord.subjectMarks.forEach((sm: any) => {
         if (!subjectMarksMap[sm.subject]) {
           subjectMarksMap[sm.subject] = { totalObtained: 0, totalMax: 0 };
         }
@@ -77,7 +77,7 @@ export const getStudentPerformanceAnalysis = async (req: Request, res: Response)
     }));
 
     const totalAssignments = submissions.length;
-    const completedAssignments = submissions.filter(s => s.status === 'Submitted' || s.status === 'Late' || s.status === 'Evaluated').length;
+    const completedAssignments = submissions.filter((s: any) => s.status === 'Submitted' || s.status === 'Late' || s.status === 'Evaluated').length;
     const assignmentCompletionRate = totalAssignments > 0 ? (completedAssignments / totalAssignments) * 100 : 0;
 
     const attendanceWeight = overallAttendanceRate * 0.3;
