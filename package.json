@@ -2,9 +2,13 @@
   "name": "student-management-root",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "backend"
+  ],
   "scripts": {
-    "install-backend": "npm --prefix backend install",
+    "postinstall": "cd backend && npm install",
     "build": "npm --prefix backend run build",
+    "prestart": "npm --prefix backend run build",
     "start": "npm --prefix backend start"
   }
 }
