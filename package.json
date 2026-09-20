@@ -2,12 +2,9 @@
   "name": "student-management-root",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "backend"
-  ],
   "scripts": {
-    "build": "npm --prefix backend run build",
-    "prestart": "npm --prefix backend run build",
-    "start": "npm --prefix backend start"
+    "install:backend": "cd backend && npm install",
+    "build": "cd backend && npm install && npm run build",
+    "start": "cd backend && node dist/index.js"
   }
 }
