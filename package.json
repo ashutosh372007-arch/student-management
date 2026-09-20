@@ -6,7 +6,6 @@
     "backend"
   ],
   "scripts": {
-    "postinstall": "cd backend && npm install",
     "build": "npm --prefix backend run build",
     "prestart": "npm --prefix backend run build",
     "start": "npm --prefix backend start"
