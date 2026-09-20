@@ -1,4 +1,14 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const getApiBaseUrl = (): string => {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+    return 'https://student-management-1-rxbv.onrender.com/api';
+  }
+  return 'http://localhost:5000/api';
+};
+
+const API_BASE = getApiBaseUrl();
 
 class ApiClient {
   private getToken(): string | null {
