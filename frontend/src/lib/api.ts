@@ -1,16 +1,25 @@
-const getApiBaseUrl = (): string => {
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL;
-  }
-  if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
-    return 'https://student-management-1-rxbv.onrender.com/api';
-  }
-  return 'http://localhost:5000/api';
-};
-
-const API_BASE = getApiBaseUrl();
+const PRODUCTION_API = 'https://student-management-1-1ttu.onrender.com/api';
+const LOCAL_API = 'http://localhost:5000/api';
 
 class ApiClient {
+  private getBaseUrl(): string {
+    // 1. Environment variable takes highest priority
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      return process.env.NEXT_PUBLIC_API_URL;
+    }
+    // 2. In browser: check if running on localhost or on cloud (Vercel/etc)
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        return LOCAL_API;
+      }
+      // Running on Vercel or any cloud domain -> use production Render backend
+      return PRODUCTION_API;
+    }
+    // 3. Server-side rendering (no window) -> use production URL
+    return PRODUCTION_API;
+  }
+
   private getToken(): string | null {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('token');
@@ -30,7 +39,7 @@ class ApiClient {
   }
 
   async get<T>(endpoint: string): Promise<T> {
-    const res = await fetch(`${API_BASE}${endpoint}`, {
+    const res = await fetch(`${this.getBaseUrl()}${endpoint}`, {
       headers: this.getHeaders(),
     });
     if (!res.ok) {
@@ -41,7 +50,7 @@ class ApiClient {
   }
 
   async post<T>(endpoint: string, data: any): Promise<T> {
-    const res = await fetch(`${API_BASE}${endpoint}`, {
+    const res = await fetch(`${this.getBaseUrl()}${endpoint}`, {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify(data),
@@ -54,7 +63,7 @@ class ApiClient {
   }
 
   async put<T>(endpoint: string, data: any): Promise<T> {
-    const res = await fetch(`${API_BASE}${endpoint}`, {
+    const res = await fetch(`${this.getBaseUrl()}${endpoint}`, {
       method: 'PUT',
       headers: this.getHeaders(),
       body: JSON.stringify(data),
@@ -67,7 +76,7 @@ class ApiClient {
   }
 
   async delete<T>(endpoint: string): Promise<T> {
-    const res = await fetch(`${API_BASE}${endpoint}`, {
+    const res = await fetch(`${this.getBaseUrl()}${endpoint}`, {
       method: 'DELETE',
       headers: this.getHeaders(),
     });
@@ -81,3 +90,4 @@ class ApiClient {
 
 const api = new ApiClient();
 export default api;
+
