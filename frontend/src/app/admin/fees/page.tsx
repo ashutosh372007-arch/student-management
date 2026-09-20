@@ -21,8 +21,9 @@ export default function FeesPage() {
     paidStudents: 0,
   });
 
-  // Modal state for recording payments
+  // Modal state for recording payments & receipts
   const [showModal, setShowModal] = useState(false);
+  const [receiptModalFee, setReceiptModalFee] = useState<Fee | null>(null);
   const [selectedStudent, setSelectedStudent] = useState<string>('');
   const [paymentAmount, setPaymentAmount] = useState<string>('');
   const [paymentMethod, setPaymentMethod] = useState<string>('UPI');
@@ -205,7 +206,7 @@ export default function FeesPage() {
                 <th>Amount Paid</th>
                 <th>Outstanding</th>
                 <th>Payment Status</th>
-                <th>Last Tx Date</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -238,6 +239,15 @@ export default function FeesPage() {
                   </td>
                   <td>
                     {fee.paymentDate ? new Date(fee.paymentDate).toLocaleDateString() : 'No payments yet'}
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => setReceiptModalFee(fee)}
+                      style={{ padding: '4px 10px', fontSize: '11px' }}
+                    >
+                      🧾 Receipt
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -431,6 +441,65 @@ export default function FeesPage() {
         renderStudentView()
       ) : (
         renderAdminView()
+      )}
+      {/* Printable Payment Receipt Modal */}
+      {receiptModalFee && (
+        <div className="modal-overlay" onClick={() => setReceiptModalFee(null)}>
+          <div className="modal receipt-container" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '520px', background: 'var(--bg-card)', padding: '24px' }}>
+            <div style={{ textAlign: 'center', borderBottom: '2px dashed var(--border)', paddingBottom: '16px', marginBottom: '16px' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>EXCELSIOR ACADEMIC CAMPUS</h2>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Official Tuition Fee Receipt</div>
+              <div style={{ fontSize: '11px', color: 'var(--primary-light)', marginTop: '4px' }}>
+                Receipt #: REC-{new Date().getFullYear()}-{receiptModalFee._id.slice(-6).toUpperCase()}
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', marginBottom: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Student Name:</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{(receiptModalFee.student as any)?.name || 'Student'}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Roll No:</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{(receiptModalFee.student as any)?.rollNo || 'N/A'}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Class & Section:</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{(receiptModalFee.student as any)?.class || 'N/A'}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Date:</span>
+                <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{new Date().toLocaleDateString()}</span>
+              </div>
+              <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '6px 0' }} />
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Total Course Fee:</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>₹{receiptModalFee.totalFee.toLocaleString()}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Total Amount Paid:</span>
+                <span style={{ fontWeight: 700, color: 'var(--success-light)' }}>₹{receiptModalFee.paidFee.toLocaleString()}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Remaining Balance:</span>
+                <span style={{ fontWeight: 700, color: receiptModalFee.remainingFee > 0 ? 'var(--danger-light)' : 'var(--success-light)' }}>
+                  ₹{receiptModalFee.remainingFee.toLocaleString()}
+                </span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Status:</span>
+                <span className={`badge ${receiptModalFee.paymentStatus === 'Paid' ? 'badge-success' : 'badge-warning'}`}>
+                  {receiptModalFee.paymentStatus}
+                </span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }} className="no-print">
+              <button className="btn btn-secondary" onClick={() => setReceiptModalFee(null)}>Close</button>
+              <button className="btn btn-primary" onClick={() => window.print()}>🖨️ Print Receipt</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

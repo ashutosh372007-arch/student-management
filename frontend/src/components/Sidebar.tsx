@@ -67,6 +67,17 @@ export default function Sidebar() {
       ];
     }
 
+    if (role === 'accountant') {
+      return [
+        { href: '/admin/dashboard', icon: '📊', label: 'Financial Dashboard' },
+        { href: '/admin/fees', icon: '💰', label: 'Fees Management' },
+        { href: '/admin/students', icon: '🎓', label: 'Student Accounts' },
+        { href: '/admin/reports', icon: '📑', label: 'Reports' },
+        { href: '/admin/notices', icon: '📢', label: 'Notice Board' },
+        { href: '/admin/notifications', icon: '🔔', label: 'Notifications' },
+      ];
+    }
+
     // Admin
     return [
       { href: '/admin/dashboard', icon: '📊', label: 'Dashboard' },
@@ -78,6 +89,7 @@ export default function Sidebar() {
       { href: '/admin/fees', icon: '💰', label: 'Fees' },
       { href: '/admin/results', icon: '📝', label: 'Results' },
       { href: '/admin/assignments', icon: '📚', label: 'Assignments' },
+      { href: '/admin/reports', icon: '📑', label: 'Reports' },
       { href: '/admin/notices', icon: '📢', label: 'Notice Board' },
       { href: '/admin/certificates', icon: '📜', label: 'Certificates' },
       { href: '/admin/audit-logs', icon: '📋', label: 'Audit Logs' },

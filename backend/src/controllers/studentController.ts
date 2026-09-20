@@ -3,6 +3,56 @@ import mongoose from 'mongoose';
 import Student from '../models/Student';
 import { logAudit } from '../utils/auditLogger';
 
+export const calculateRiskLevel = (attendanceRate: number, avgPercentage: number, pendingSubmissions: number) => {
+  const riskReasons: string[] = [];
+  if (attendanceRate < 75) {
+    riskReasons.push('Low attendance');
+  }
+  if (avgPercentage < 50) {
+    riskReasons.push('Poor marks');
+  }
+  if (pendingSubmissions > 2) {
+    riskReasons.push('Multiple pending assignments');
+  }
+
+  let riskLevel = 'LOW RISK';
+  if (attendanceRate < 65 || avgPercentage < 40 || pendingSubmissions > 3) {
+    riskLevel = 'HIGH RISK';
+  } else if (riskReasons.length > 0) {
+    riskLevel = 'MEDIUM RISK';
+  }
+
+  return { riskLevel, riskReasons };
+};
+
+export const calculatePlacementScore = (
+  avgPercentage: number,
+  skills: Array<{ level: string }> = [],
+  projects: any[] = [],
+  certifications: any[] = [],
+  aptitudeScore: number = 0,
+  communicationScore: number = 0
+) => {
+  const academicPoints = (avgPercentage / 100) * 30; // max 30
+
+  let skillPoints = 0;
+  if (Array.isArray(skills)) {
+    skills.forEach((s: any) => {
+      if (s.level === 'Advanced') skillPoints += 5;
+      else if (s.level === 'Intermediate') skillPoints += 3;
+      else skillPoints += 1;
+    });
+  }
+  skillPoints = Math.min(skillPoints, 20); // max 20
+
+  const projectPoints = Math.min((Array.isArray(projects) ? projects.length : 0) * 7, 20); // max 20
+  const certPoints = Math.min((Array.isArray(certifications) ? certifications.length : 0) * 5, 15); // max 15
+  const aptPoints = ((aptitudeScore || 0) / 100) * 10; // max 10
+  const commPoints = ((communicationScore || 0) / 100) * 5; // max 5
+
+  return Math.round(academicPoints + skillPoints + projectPoints + certPoints + aptPoints + commPoints);
+};
+
 export const recalculateStudentMetrics = async (studentId: string): Promise<any> => {
   try {
     const student = await Student.findById(studentId);
@@ -29,43 +79,17 @@ export const recalculateStudentMetrics = async (studentId: string): Promise<any>
     const pendingSubmissions = await Submission.countDocuments({ student: studentId, status: 'Pending' });
 
     // 4. Calculate Risk Level & Reasons
-    const riskReasons = [];
-    if (attendanceRate < 75) {
-      riskReasons.push('Low attendance');
-    }
-    if (avgPercentage < 50) {
-      riskReasons.push('Poor marks');
-    }
-    if (pendingSubmissions > 2) {
-      riskReasons.push('Multiple pending assignments');
-    }
-
-    let riskLevel = 'LOW RISK';
-    if (attendanceRate < 65 || avgPercentage < 40 || pendingSubmissions > 3) {
-      riskLevel = 'HIGH RISK';
-    } else if (riskReasons.length > 0) {
-      riskLevel = 'MEDIUM RISK';
-    }
+    const { riskLevel, riskReasons } = calculateRiskLevel(attendanceRate, avgPercentage, pendingSubmissions);
 
     // 5. Calculate Placement Score
-    const academicPoints = (avgPercentage / 100) * 30; // max 30
-    
-    let skillPoints = 0;
-    if (Array.isArray(student.skills)) {
-      student.skills.forEach((s: any) => {
-        if (s.level === 'Advanced') skillPoints += 5;
-        else if (s.level === 'Intermediate') skillPoints += 3;
-        else skillPoints += 1;
-      });
-    }
-    skillPoints = Math.min(skillPoints, 20); // max 20
-    
-    const projectPoints = Math.min((Array.isArray(student.projects) ? student.projects.length : 0) * 7, 20); // max 20
-    const certPoints = Math.min((Array.isArray(student.certifications) ? student.certifications.length : 0) * 5, 15); // max 15
-    const aptPoints = ((student.aptitudeScore || 0) / 100) * 10; // max 10
-    const commPoints = ((student.communicationScore || 0) / 100) * 5; // max 5
-    
-    const placementScore = Math.round(academicPoints + skillPoints + projectPoints + certPoints + aptPoints + commPoints);
+    const placementScore = calculatePlacementScore(
+      avgPercentage,
+      student.skills,
+      student.projects,
+      student.certifications,
+      student.aptitudeScore,
+      student.communicationScore
+    );
 
     student.riskLevel = riskLevel as any;
     student.riskReasons = riskReasons;

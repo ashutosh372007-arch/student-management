@@ -102,7 +102,7 @@ export interface User {
   id: string;
   username: string;
   name: string;
-  role: string;
+  role: 'admin' | 'teacher' | 'student' | 'parent' | 'accountant' | string;
   studentId?: string;
   teacherId?: string;
 }

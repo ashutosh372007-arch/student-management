@@ -1088,3 +1088,26 @@ tr:hover td {
 .global-search-item:last-child {
   border-bottom: none;
 }
+
+/* ============ Print Media Styles for Receipt & Reports ============ */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .sidebar, .dashboard-header, button, .no-print {
+    display: none !important;
+  }
+  .main-content {
+    margin-left: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  .card, .receipt-container {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}
+

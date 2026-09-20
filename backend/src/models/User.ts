@@ -6,7 +6,7 @@ const userSchema = new Schema<IUser>(
   {
     username: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true },
-    role: { type: String, enum: ['admin', 'teacher', 'student', 'parent'], default: 'admin' },
+    role: { type: String, enum: ['admin', 'teacher', 'student', 'parent', 'accountant'], default: 'admin' },
     name: { type: String, required: true, trim: true },
     studentId: { type: Schema.Types.ObjectId, ref: 'Student' },
     teacherId: { type: Schema.Types.ObjectId, ref: 'Teacher' },

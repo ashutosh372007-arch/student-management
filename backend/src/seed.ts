@@ -72,7 +72,7 @@ async function seedDatabase() {
     await mongoose.connection.db!.dropDatabase();
     console.log('✅ Database dropped.');
 
-    // 1. Create Admin User
+    // 1. Create Admin & Accountant Users
     const admin = new User({
       username: 'admin',
       password: 'admin123',
@@ -81,6 +81,15 @@ async function seedDatabase() {
     });
     await admin.save();
     console.log('🔑 Admin user created: admin / admin123');
+
+    const accountant = new User({
+      username: 'accountant',
+      password: 'accountant123',
+      name: 'Chief Accountant',
+      role: 'accountant',
+    });
+    await accountant.save();
+    console.log('🔑 Accountant user created: accountant / accountant123');
 
     // 2. Seed Teachers
     console.log('👩‍🏫 Seeding 20 Teachers...');
@@ -126,13 +135,46 @@ async function seedDatabase() {
     console.log('🧑‍🎓 Seeding 20 Students...');
     const studentsData = SEED_STUDENTS.map((s, index) => {
       const isClass10 = index < 10;
+      const isLowAttendance = index === 1 || index === 11 || index === 7;
+      const isHighPerformer = index === 0 || index === 3 || index === 10 || index === 12;
+
+      let riskLevel: 'LOW RISK' | 'MEDIUM RISK' | 'HIGH RISK' = 'LOW RISK';
+      let riskReasons: string[] = [];
+      if (isLowAttendance) {
+        riskLevel = 'HIGH RISK';
+        riskReasons.push('Low attendance (< 75%)');
+      } else if (index === 4 || index === 14) {
+        riskLevel = 'MEDIUM RISK';
+        riskReasons.push('Pending fee dues');
+      }
+
+      const placementScore = isHighPerformer ? Math.floor(Math.random() * 15) + 85 : Math.floor(Math.random() * 30) + 55;
+
       return {
         ...s,
         rollNo: `S2026${String(index + 1).padStart(3, '0')}`,
         class: isClass10 ? 'Class 10' : 'Class 11',
         section: 'A',
         dateOfBirth: new Date(s.dob),
-        admissionDate: new Date('2025-04-10')
+        admissionDate: new Date('2025-04-10'),
+        riskLevel,
+        riskReasons,
+        placementScore,
+        aptitudeScore: isHighPerformer ? 92 : 74,
+        communicationScore: isHighPerformer ? 88 : 70,
+        skills: [
+          { name: 'Python Basics', level: 'Intermediate' },
+          { name: 'Data Analysis', level: isHighPerformer ? 'Advanced' : 'Beginner' },
+          { name: 'Public Speaking', level: 'Intermediate' }
+        ],
+        projects: [
+          { title: 'Student Portal System', description: 'Web application built with TypeScript & Node.js' },
+          { title: 'Smart Attendance Tracker', description: 'Automated attendance tracking system' }
+        ],
+        certifications: [
+          { name: 'Full Stack Web Development', issuingOrganization: 'Coursera', date: '2025-08-10' },
+          { name: 'Python Programming Essentials', issuingOrganization: 'Udemy', date: '2025-06-15' }
+        ]
       };
     });
     const students = await Student.insertMany(studentsData);

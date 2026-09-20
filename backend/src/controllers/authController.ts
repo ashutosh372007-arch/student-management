@@ -77,9 +77,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      user.password = password;
-      await user.save();
-      console.log(`Auto-updated password for ${username}`);
+      res.status(400).json({ message: 'Invalid credentials' });
+      return;
     }
 
     // Link if not already linked

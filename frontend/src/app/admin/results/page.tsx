@@ -166,8 +166,78 @@ export default function ResultsPage() {
   });
 
   const renderAdminView = () => {
+    // Compute summary statistics
+    const totalCount = results.length || 1;
+    const avgScore = Math.round(results.reduce((acc, r) => acc + (r.percentage || 0), 0) / totalCount);
+    const topScorers = [...results].sort((a, b) => b.percentage - a.percentage).slice(0, 3);
+    const atRiskScorers = [...results].filter((r) => r.percentage < 60 || r.grade === 'F');
+
     return (
       <div>
+        {/* Performance Metric Cards */}
+        <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', marginBottom: '24px' }}>
+          <div className="stat-card">
+            <div className="stat-card-value" style={{ color: 'var(--primary-light)' }}>{avgScore}%</div>
+            <div className="stat-card-label">Batch Average Score</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-card-value" style={{ color: 'var(--success)' }}>{topScorers.length}</div>
+            <div className="stat-card-label">Honor Roll Students</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-card-value" style={{ color: 'var(--danger)' }}>{atRiskScorers.length}</div>
+            <div className="stat-card-label">Academic Review Needed</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-card-value" style={{ color: 'var(--accent-light)' }}>
+              {results.length > 0 ? (results.reduce((a, r) => a + r.gpa, 0) / results.length).toFixed(2) : '3.80'}
+            </div>
+            <div className="stat-card-label">Average Cumulative CGPA</div>
+          </div>
+        </div>
+
+        {/* Top Performers & At Risk Banner */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px' }}>
+          {/* Top Performers */}
+          <div className="card" style={{ background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(17, 28, 46, 0.9) 100%)', borderLeft: '4px solid var(--success)' }}>
+            <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--success-light)', marginBottom: '12px' }}>
+              🏆 Top Academic Honor Roll
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {topScorers.map((r, idx) => (
+                <div key={r._id || idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'var(--bg-glass)', borderRadius: 'var(--radius-sm)' }}>
+                  <div>
+                    <span style={{ fontWeight: 600, fontSize: '13px', color: 'var(--text-primary)' }}>{(r.student as any)?.name || 'Top Student'}</span>
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>Class: {r.class}</span>
+                  </div>
+                  <span className="badge badge-success" style={{ fontWeight: 700 }}>{r.percentage}% ({r.grade})</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Academically At Risk */}
+          <div className="card" style={{ background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(17, 28, 46, 0.9) 100%)', borderLeft: '4px solid var(--danger)' }}>
+            <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--danger-light)', marginBottom: '12px' }}>
+              ⚠️ Academically At-Risk (&lt; 60% Marks)
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {atRiskScorers.slice(0, 3).map((r, idx) => (
+                <div key={r._id || idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'var(--bg-glass)', borderRadius: 'var(--radius-sm)' }}>
+                  <div>
+                    <span style={{ fontWeight: 600, fontSize: '13px', color: 'var(--text-primary)' }}>{(r.student as any)?.name || 'Student'}</span>
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>Class: {r.class}</span>
+                  </div>
+                  <span className="badge badge-danger" style={{ fontWeight: 700 }}>{r.percentage}% ({r.grade})</span>
+                </div>
+              ))}
+              {atRiskScorers.length === 0 && (
+                <div style={{ fontSize: '12px', color: 'var(--success-light)', padding: '8px 0' }}>✓ All students are currently scoring above 60%.</div>
+              )}
+            </div>
+          </div>
+        </div>
+
         <div className="table-container">
           <div className="table-header">
             <div className="table-title">Student Semester Marks ({filteredResults.length})</div>
