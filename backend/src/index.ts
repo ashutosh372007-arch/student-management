@@ -43,16 +43,25 @@ app.use('/api/notices', noticeRoutes);
 app.use('/api/certificates', certificateRoutes);
 app.use('/api/audit-logs', auditLogRoutes);
 
-// Health check
+// Root Health check for Cloud Render health probes
+app.get('/', (_req, res) => {
+  res.send('🚀 Student Management System API is live!');
+});
+
+// Health check endpoint
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'OK', message: 'Student Management API is running' });
 });
 
-// Connect to DB and start server
-connectDB().then(async () => {
-  await runMigrations();
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+// Start listening immediately on 0.0.0.0 so cloud providers (Render) pass health checks instantly
+app.listen(Number(PORT), '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  
+  // Connect to DB and run migrations asynchronously
+  connectDB().then(async () => {
+    await runMigrations();
+  }).catch((err) => {
+    console.error('❌ Error during async DB initialization:', err);
   });
 });
 
