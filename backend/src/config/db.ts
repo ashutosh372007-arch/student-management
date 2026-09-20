@@ -17,7 +17,9 @@ const connectDB = async (): Promise<void> => {
     if (!process.env.MONGODB_URI && !process.env.MONGO_URI) {
       console.error('👉 TIP FOR RENDER/CLOUD DEPLOYMENT: Please set MONGODB_URI in Render Environment Variables!');
     }
-    process.exit(1);
+    // Don't kill the server - let it stay alive so Render doesn't mark deploy as failed
+    // The server will respond with appropriate errors when DB operations are attempted
+    console.error('⚠️ Server will continue running without DB. Fix your MONGODB_URI and redeploy.');
   }
 };
 
